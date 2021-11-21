@@ -46,4 +46,4 @@ class holidayDonwloader:
 
 hd = holidayDonwloader()
 # print(hd.getCountriesDict())
-print(hd.getPublicHolidaysDatesList("2021", "DE"))
+print(hd.getPublicHolidaysDatesList("2021", "DE", "DE-SN"))

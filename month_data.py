@@ -1,5 +1,5 @@
 import calendar
-class month_basics:
+class monthBasics:
     month_number : int = 0
     year : int = 0
     days_amount : int = 0
@@ -9,3 +9,9 @@ class month_basics:
         self.year = year
         self.days_amount = calendar.monthrange(self.year, self.month_number)[1]
         self.day_first = calendar.weekday(self.year, self.month_number,1)
+    
+    def __str__(self) -> str:
+        return "monthBasics: {month_number : " + str(self.month_number) + ", year : " + str(self.year) + ", days_amount: " + str(self.days_amount) + ", day_first: " + str(self.day_first) + "}"
+
+mb = monthBasics(11,2021)
+print(mb)
