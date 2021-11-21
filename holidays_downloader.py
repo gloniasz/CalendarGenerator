@@ -40,10 +40,19 @@ class holidayDonwloader:
                 elif record['counties'] == None or county in record['counties']:
                     dates.append(record['date'])
         return dates
+
+    def getPublicHolidaysForMonthList(self, year, month : int, country: str, county : str = ""):
+        dates = []
+        for date in self.getPublicHolidaysDatesList(year, country, county):
+            if int(date[5:7]) == int(month):
+                dates.append(int(date[8:10]))
+        return dates
     
     def createHolidayEndpoint(self, year, country : str):
         return self.holidays_endpoint.replace("_",  str(year), 1).replace("_", country, 1)
+        
 
 hd = holidayDonwloader()
 # print(hd.getCountriesDict())
 print(hd.getPublicHolidaysDatesList("2021", "DE", "DE-SN"))
+print(hd.getPublicHolidaysForMonthList(2021, "5", "DE", "DE-SN"))
