@@ -4,16 +4,18 @@ from headers import headerGenerator
 from holidays_downloader import holidayDonwloader
 
 class tableGenerator:
-    def createConfluenceHeaderString(header, name : bool = False, heading_separator : str = constants.HEADING_SEPARATOR):
-        if name:
-            formattedHeader = heading_separator + "Name" + heading_separator
-        else:        
-            formattedHeader = heading_separator + " " + heading_separator
-        for column in header:
-            formattedHeader = formattedHeader + str(column) + heading_separator
-        return formattedHeader
-    def createConfluenceHeader2ndRowString(header, heading_separator : str = constants.HEADING_SEPARATOR, column_separator : str = constants.COLUMN_SEPARATOR, boldening : str = constants.BOLD_STYLE):
-        formattedHeader = heading_separator + " " + column_separator
+    # pass month in range 1-12
+    def createCounfluenceHeaderMonth(year, month : int, month_abbr : bool = False, heading_separator : str = constants.HEADING_SEPARATOR):
+        if month < 1 or month > 12:
+            raise IndexError
+        if month_abbr:
+            month_str = constants.MONTHS_ABBR[month-1]
+        else:
+            month_str = constants.MONTHS[month-1]
+        return heading_separator + month_str + " " + str(year) + heading_separator      
+
+    def createConfluenceDayHeaderString(header, header_str : str = " ", heading_separator : str = constants.HEADING_SEPARATOR, column_separator : str = constants.COLUMN_SEPARATOR, boldening : str = constants.BOLD_STYLE):
+        formattedHeader = heading_separator + header_str + column_separator
         for column in header:
             formattedHeader = formattedHeader + boldening + str(column) + boldening + column_separator
         return formattedHeader
@@ -40,9 +42,10 @@ class tableGenerator:
     def createHolidaysForMonthList(year, month, country : str, county : str =""):
         return holidayDonwloader().getPublicHolidaysForMonthList(year, month, country, county)
 
-mb = monthBasics(11, 2021)
+mb = monthBasics(1, 2022)
 headers = headerGenerator(mb)
 
-print(tableGenerator.createConfluenceHeaderString(headers.getDaysNumbersHeader(), True))
-print(tableGenerator.createConfluenceHeader2ndRowString(tableGenerator.createColouredWeekends(headers.getDaysNamesHeader(True))))
-print(tableGenerator.createEmployeeRow("Feliks Feliksiński", mb.days_amount, tableGenerator.createHolidaysForMonthList(mb.year, mb.month_number, "DE")))
+print(tableGenerator.createCounfluenceHeaderMonth(mb.year, mb.month_number))
+print(tableGenerator.createConfluenceDayHeaderString(headers.getDaysNumbersHeader(), "Name"))
+print(tableGenerator.createConfluenceDayHeaderString(tableGenerator.createColouredWeekends(headers.getDaysNamesHeader(True))))
+print(tableGenerator.createEmployeeRow("Feliks Feliksiński", mb.days_amount, tableGenerator.createHolidaysForMonthList(mb.year, mb.month_number, "PL")))

@@ -5,7 +5,7 @@ class headerGenerator:
     headers : int = [] # stores week day numbers
     def setHeaders(self, days_amount: int, day_first: int):
         for day_nr in range(days_amount):
-            self.headers.append(day_nr % 7 + day_first)
+            self.headers.append((day_nr + day_first) % 7)
 
     def __init__(self, month_data: monthBasics =  None) -> None:
         self.headers = []
