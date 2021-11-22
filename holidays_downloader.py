@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Dict
 import constants
 import urllib.request, json
@@ -30,6 +31,18 @@ class holidayDonwloader:
                 countries[record['name']] = record['countryCode']
         return countries
 
+    def GetCountiesList(self, country : str):
+        counties = []
+        with urllib.request.urlopen(self.address+self.createHolidayEndpoint(datetime.now().year, country)) as url:
+            jsonData = json.loads(url.read().decode())
+            for record in jsonData:
+                if record['counties'] is not None:
+                    for county in record['counties']:
+                        if county not in counties:
+                            counties.append(county)
+        counties.sort()
+        return counties
+
     def getPublicHolidaysDatesList(self, year, country : str, county : str = ""):
         dates = []
         with urllib.request.urlopen(self.address+self.createHolidayEndpoint(year, country)) as url:
@@ -54,5 +67,6 @@ class holidayDonwloader:
 
 hd = holidayDonwloader()
 # print(hd.getCountriesDict())
+print(hd.GetCountiesList("DE"))
 print(hd.getPublicHolidaysDatesList("2021", "DE", "DE-SN"))
 print(hd.getPublicHolidaysForMonthList(2021, "5", "DE", "DE-SN"))
