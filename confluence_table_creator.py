@@ -31,12 +31,18 @@ class tableGenerator:
     def createEmployeeRow(name : str, days_amount, holiday_data = [], holiday_check : str = constants.PUBLIC_HOLIDAY_CHECK, heading_separator : str = constants.HEADING_SEPARATOR, column_separator : str = constants.COLUMN_SEPARATOR, boldening : str = constants.BOLD_STYLE):
         employeeRow = heading_separator + name + column_separator
         for day in range(1, days_amount+1):
-            employeeRow = employeeRow + " " + column_separator
+            if day in holiday_data:
+                employeeRow = employeeRow + holiday_check + column_separator
+            else:
+                employeeRow = employeeRow + " " + column_separator
         return employeeRow
+
+    def createHolidaysForMonthList(year, month, country : str, county : str =""):
+        return holidayDonwloader().getPublicHolidaysForMonthList(year, month, country, county)
 
 mb = monthBasics(11, 2021)
 headers = headerGenerator(mb)
 
 print(tableGenerator.createConfluenceHeaderString(headers.getDaysNumbersHeader(), True))
 print(tableGenerator.createConfluenceHeader2ndRowString(tableGenerator.createColouredWeekends(headers.getDaysNamesHeader(True))))
-print(tableGenerator.createEmployeeRow("Feliks Feliksiński", mb.days_amount))
+print(tableGenerator.createEmployeeRow("Feliks Feliksiński", mb.days_amount, tableGenerator.createHolidaysForMonthList(mb.year, mb.month_number, "DE")))
